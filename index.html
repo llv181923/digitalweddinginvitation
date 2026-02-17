@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Laura & Steve • Wedding Invitation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose-deep: #8b1538;
+      --rose-red: #c41e3a;
+      --rose-bright: #dc143c;
+      --gold: #d4af37;
+      --gold-light: #f4e4b8;
+      --ivory: #fffef9;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      font-family: 'Cinzel', serif;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      background: 
+        radial-gradient(circle at 30% 20%, rgba(220,20,60,0.15) 0%, transparent 40%),
+        radial-gradient(circle at 70% 80%, rgba(139,21,56,0.12) 0%, transparent 35%),
+        radial-gradient(circle at 50% 50%, rgba(212,175,55,0.08) 0%, transparent 50%),
+        linear-gradient(160deg, #1a0f2e 0%, #2a1535 40%, #1a0a0f 100%);
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Starfield */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: 
+        radial-gradient(1px 1px at 20% 30%, white, transparent),
+        radial-gradient(1px 1px at 60% 70%, white, transparent),
+        radial-gradient(2px 2px at 50% 50%, white, transparent),
+        radial-gradient(1px 1px at 80% 10%, white, transparent),
+        radial-gradient(1px 1px at 90% 60%, white, transparent);
+      background-size: 200% 200%, 180% 180%, 220% 220%, 190% 190%, 210% 210%;
+      opacity: 0.4;
+      pointer-events: none;
+      animation: twinkle 8s ease-in-out infinite;
+      z-index: 0;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.6; }
+    }
+
+    /* Language Selector Screen */
+    .language-selector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+      opacity: 1;
+      transition: opacity 0.6s ease;
+    }
+
+    .language-selector.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .selector-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(18px, 5vw, 28px);
+      color: var(--gold-light);
+      margin-bottom: 20px;
+      text-align: center;
+      letter-spacing: 0.1em;
+      animation: fade-in 1s ease;
+    }
+
+    .selector-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(32px, 10vw, 64px);
+      color: var(--ivory);
+      margin-bottom: 40px;
+      text-align: center;
+      line-height: 1.2;
+      animation: fade-in 1.2s ease;
+    }
+
+    .language-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+      max-width: 320px;
+      animation: fade-in 1.4s ease;
+    }
+
+    @media (min-width: 480px) {
+      .language-buttons {
+        flex-direction: row;
+        max-width: 500px;
+      }
+    }
+
+    .lang-btn {
+      flex: 1;
+      font-family: 'Cinzel', serif;
+      font-size: clamp(14px, 3.5vw, 18px);
+      letter-spacing: 0.2em;
+      color: var(--ivory);
+      background: linear-gradient(135deg, var(--rose-deep) 0%, var(--rose-red) 50%, var(--rose-bright) 100%);
+      padding: 18px 32px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow:
+        0 0 20px rgba(220,20,60,0.4),
+        0 6px 24px rgba(139,21,56,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.15);
+      transition: all 0.4s ease;
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .lang-btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .lang-btn:hover, .lang-btn:active {
+      transform: translateY(-2px);
+      box-shadow: 
+        0 0 30px rgba(220,20,60,0.6),
+        0 10px 35px rgba(139,21,56,0.5);
+    }
+
+    .lang-btn:hover::before, .lang-btn:active::before {
+      left: 100%;
+    }
+
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Invitation Container (hidden initially) */
+    .invitation-container {
+      display: none;
+      opacity: 0;
+      position: fixed;
+      inset: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .invitation-container.active {
+      display: block;
+      animation: fade-in-invitation 0.8s ease forwards;
+    }
+
+    @keyframes fade-in-invitation {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Language Selector -->
+  <div class="language-selector" id="languageSelector">
+    <p class="selector-title">You are invited to celebrate</p>
+    <div class="selector-names">Laura & Steve</div>
+    <div class="language-buttons">
+      <button class="lang-btn" onclick="selectLanguage('english')">English</button>
+      <button class="lang-btn" onclick="selectLanguage('spanish')">Español</button>
+    </div>
+  </div>
+
+  <!-- English Invitation -->
+  <div class="invitation-container" id="englishInvitation">
+    <iframe src="invitation-english.html" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0;"></iframe>
+  </div>
+
+  <!-- Spanish Invitation -->
+  <div class="invitation-container" id="spanishInvitation">
+    <iframe src="invitation-spanish.html" style="width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0;"></iframe>
+  </div>
+
+  <script>
+    function selectLanguage(lang) {
+      const selector = document.getElementById('languageSelector');
+      const englishInv = document.getElementById('englishInvitation');
+      const spanishInv = document.getElementById('spanishInvitation');
+
+      // Hide selector
+      selector.classList.add('hidden');
+
+      // Show selected invitation
+      setTimeout(() => {
+        if (lang === 'english') {
+          englishInv.classList.add('active');
+        } else {
+          spanishInv.classList.add('active');
+        }
+      }, 600);
+    }
+
+    // Prevent zoom on double-tap for mobile
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function(event) {
+      const now = Date.now();
+      if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+      }
+      lastTouchEnd = now;
+    }, false);
+  </script>
+</body>
+</html>
