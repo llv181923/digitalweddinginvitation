@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laura & Steve • You're Invited</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose-deep: #8b1538;
+      --rose-red: #c41e3a;
+      --rose-bright: #dc143c;
+      --gold: #d4af37;
+      --gold-light: #f4e4b8;
+      --ivory: #fffef9;
+      --night: #0f0820;
+      --night-blue: #1a0f2e;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: 'Cinzel', serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 150vh;
+      padding: 200px 20px;
+      background: 
+        radial-gradient(circle at 30% 20%, rgba(220,20,60,0.15) 0%, transparent 40%),
+        radial-gradient(circle at 70% 80%, rgba(139,21,56,0.12) 0%, transparent 35%),
+        radial-gradient(circle at 50% 50%, rgba(212,175,55,0.08) 0%, transparent 50%),
+        linear-gradient(160deg, #1a0f2e 0%, #2a1535 40%, #1a0a0f 100%);
+      position: relative;
+    }
+
+    /* Starfield */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: 
+        radial-gradient(1px 1px at 20% 30%, white, transparent),
+        radial-gradient(1px 1px at 60% 70%, white, transparent),
+        radial-gradient(2px 2px at 50% 50%, white, transparent),
+        radial-gradient(1px 1px at 80% 10%, white, transparent),
+        radial-gradient(1px 1px at 90% 60%, white, transparent);
+      background-size: 
+        200% 200%,
+        180% 180%,
+        220% 220%,
+        190% 190%,
+        210% 210%;
+      opacity: 0.4;
+      pointer-events: none;
+      animation: twinkle 8s ease-in-out infinite;
+      z-index: 0;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.6; }
+    }
+
+    /* Floating rose petals */
+    .petals-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .petal-float {
+      position: absolute;
+      opacity: 0;
+      animation: petal-drift linear infinite;
+    }
+    @keyframes petal-drift {
+      0% { transform: translateY(-30px) rotate(0deg) translateX(0); opacity: 0; }
+      5% { opacity: 0.7; }
+      90% { opacity: 0.4; }
+      100% { transform: translateY(110vh) rotate(720deg) translateX(80px); opacity: 0; }
+    }
+
+    /* Scene */
+    .scene {
+      position: relative;
+      width: 380px;
+      height: 900px;
+      cursor: pointer;
+      perspective: 1400px;
+    }
+
+    .hint {
+      position: absolute;
+      bottom: -58px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--gold-light);
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      letter-spacing: 0.14em;
+      white-space: nowrap;
+      animation: hint-glow 3s ease-in-out infinite;
+      text-shadow: 0 0 8px rgba(212,175,55,0.5);
+      z-index: 35;
+    }
+    @keyframes hint-glow {
+      0%, 100% { opacity: 0.5; text-shadow: 0 0 6px rgba(212,175,55,0.3); }
+      50% { opacity: 1; text-shadow: 0 0 12px rgba(212,175,55,0.6); }
+    }
+
+    /* Envelope */
+    .envelope {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 260px;
+      transition: transform 0.4s ease, filter 0.4s ease;
+    }
+    .scene:hover .envelope:not(.opened) {
+      transform: translateY(-8px);
+      filter: drop-shadow(0 20px 50px rgba(139,21,56,0.4));
+    }
+
+    .envelope-body {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(155deg, #2a1018 0%, #3d1520 50%, #2a1018 100%);
+      border-radius: 4px 4px 10px 10px;
+      box-shadow:
+        0 28px 80px rgba(0,0,0,0.7),
+        0 8px 30px rgba(139,21,56,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+      border: 1px solid rgba(139,21,56,0.3);
+    }
+
+    .envelope-body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 30px,
+        rgba(139,21,56,0.08) 30px,
+        rgba(139,21,56,0.08) 31px
+      );
+    }
+
+    .env-bottom {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 52%;
+      overflow: hidden;
+    }
+    .env-bottom::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 191px solid transparent;
+      border-right: 191px solid transparent;
+      border-bottom: 130px solid rgba(139,21,56,0.25);
+    }
+    .env-left {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 0;
+      border-top: 260px solid transparent;
+      border-left: 191px solid rgba(139,21,56,0.18);
+    }
+    .env-right {
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 0; height: 0;
+      border-top: 260px solid transparent;
+      border-right: 191px solid rgba(212,175,55,0.12);
+    }
+
+    .env-border {
+      position: absolute;
+      inset: 6px;
+      border: 0.5px solid rgba(212,175,55,0.3);
+      border-radius: 3px;
+      pointer-events: none;
+    }
+    .env-border::after {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      border: 0.5px solid rgba(212,175,55,0.12);
+      border-radius: 2px;
+    }
+
+    /* Top flap */
+    .flap-top {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 150px;
+      transform-origin: top center;
+      transform-style: preserve-3d;
+      transition: transform 1.2s cubic-bezier(0.4,0,0.2,1);
+      z-index: 10;
+    }
+    .flap-face {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      border-radius: 4px 4px 0 0;
+    }
+    .flap-face::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 191px solid transparent;
+      border-right: 191px solid transparent;
+      border-top: 143px solid #3d1520;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+    }
+
+    .flap-roses {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 143px;
+      pointer-events: none;
+      z-index: 2;
+      overflow: hidden;
+    }
+
+    .envelope.opened .flap-top {
+      transform: rotateX(-190deg);
+      transition: transform 1.3s cubic-bezier(0.4,0,0.2,1);
+      z-index: 3;
+    }
+
+    /* Enchanted rose wax seal */
+    .seal {
+      position: absolute;
+      top: 88px; left: 50%;
+      transform: translate(-50%, 0);
+      width: 70px; height: 70px;
+      z-index: 25;
+      transition: transform 0.6s ease, opacity 0.6s ease;
+    }
+    .seal-body {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #dc143c, #8b1538 60%, #5a0a1f);
+      box-shadow:
+        0 0 20px rgba(220,20,60,0.6),
+        0 5px 20px rgba(139,21,56,0.5),
+        0 2px 8px rgba(0,0,0,0.4),
+        inset 0 2px 6px rgba(255,255,255,0.15),
+        inset 0 -4px 8px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      animation: seal-glow 4s ease-in-out infinite;
+    }
+    @keyframes seal-glow {
+      0%, 100% { box-shadow: 
+        0 0 18px rgba(220,20,60,0.5),
+        0 5px 20px rgba(139,21,56,0.4),
+        0 2px 8px rgba(0,0,0,0.4),
+        inset 0 2px 6px rgba(255,255,255,0.15),
+        inset 0 -4px 8px rgba(0,0,0,0.3); }
+      50% { box-shadow: 
+        0 0 30px rgba(220,20,60,0.8),
+        0 5px 25px rgba(139,21,56,0.6),
+        0 2px 10px rgba(0,0,0,0.5),
+        inset 0 2px 6px rgba(255,255,255,0.2),
+        inset 0 -4px 8px rgba(0,0,0,0.3); }
+    }
+    .seal-body::before {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border-radius: 50%;
+      border: 0.5px solid rgba(255,255,255,0.15);
+    }
+    .seal-rose {
+      position: relative;
+      z-index: 2;
+    }
+
+    .envelope.opened .seal {
+      transform: translate(-50%, 0) scale(0.5) rotate(25deg);
+      opacity: 0;
+      transition: all 0.6s ease 0.2s;
+    }
+
+    /* Card - Your Custom Invitation */
+    .card {
+      position: absolute;
+      left: 50%;
+      bottom: 200px;
+      transform: translateX(-50%);
+      width: 350px;
+      background: white;
+      border-radius: 3px;
+      box-shadow:
+        0 50px 120px rgba(0,0,0,0.6),
+        0 15px 50px rgba(139,21,56,0.2);
+      z-index: 5;
+      opacity: 0;
+      pointer-events: none;
+      transition:
+        transform 1s cubic-bezier(0.34,1.5,0.64,1),
+        opacity 0.8s ease;
+      overflow: hidden;
+    }
+
+    .card-image {
+      width: 100%;
+      display: block;
+    }
+
+    .card-button-container {
+      padding: 30px;
+      text-align: center;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.95), rgba(255,255,255,1));
+    }
+
+    .card.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(80px);
+      pointer-events: all;
+      z-index: 30;
+    }
+
+    .card-cta {
+      display: inline-block;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      color: var(--ivory);
+      background: linear-gradient(135deg, var(--rose-deep) 0%, var(--rose-red) 50%, var(--rose-bright) 100%);
+      padding: 15px 40px;
+      text-decoration: none;
+      border-radius: 50px;
+      box-shadow:
+        0 0 20px rgba(220,20,60,0.4),
+        0 6px 24px rgba(139,21,56,0.35),
+        0 2px 8px rgba(0,0,0,0.2),
+        inset 0 1px 0 rgba(255,255,255,0.15);
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+      text-transform: uppercase;
+    }
+    .card-cta::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+      transition: left 0.6s ease;
+    }
+    .card-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 
+        0 0 30px rgba(220,20,60,0.6),
+        0 10px 35px rgba(139,21,56,0.5),
+        0 4px 12px rgba(0,0,0,0.25);
+    }
+    .card-cta:hover::before { left: 100%; }
+
+    /* Rose petal burst on open */
+    .burst-petal {
+      position: fixed;
+      pointer-events: none;
+      animation: burst-fall linear forwards;
+      z-index: 150;
+    }
+    @keyframes burst-fall {
+      0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0; }
+      5% { opacity: 1; }
+      95% { opacity: 0.5; }
+      100% { transform: translateY(110vh) rotate(var(--rotate)) translateX(var(--drift)) scale(0.6); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="petals-layer" id="petals"></div>
+
+  <div class="scene" id="scene" onclick="openEnvelope()">
+    <div class="hint" id="hint">OPEN TO REVEAL ✦</div>
+
+    <div class="envelope" id="envelope">
+      <div class="envelope-body">
+        <div class="env-bottom"></div>
+        <div class="env-left"></div>
+        <div class="env-right"></div>
+        <div class="env-border"></div>
+      </div>
+
+      <div class="flap-top">
+        <div class="flap-face"></div>
+        <div class="flap-roses">
+          <svg width="380" height="143" viewBox="0 0 380 143" fill="none" xmlns="http://www.w3.org/2000/svg"
+               style="position:absolute;top:0;left:0;clip-path:polygon(0 0,380 0,190 143);">
+            <g opacity="0.85">
+              <circle cx="75" cy="48" r="18" fill="#8b1538" opacity="0.3"/>
+              <circle cx="75" cy="48" r="14" fill="#c41e3a" opacity="0.5"/>
+              <circle cx="75" cy="48" r="10" fill="#dc143c" opacity="0.7"/>
+              <circle cx="75" cy="48" r="6" fill="#e57373" opacity="0.6"/>
+              <ellipse cx="75" cy="30" rx="7" ry="12" fill="#8b1538" opacity="0.4"/>
+              <ellipse cx="91" cy="38" rx="7" ry="12" fill="#c41e3a" opacity="0.45" transform="rotate(60 75 48)"/>
+              <ellipse cx="91" cy="58" rx="7" ry="12" fill="#c41e3a" opacity="0.45" transform="rotate(120 75 48)"/>
+              <ellipse cx="75" cy="66" rx="7" ry="12" fill="#8b1538" opacity="0.4" transform="rotate(180 75 48)"/>
+            </g>
+            <g opacity="0.85">
+              <circle cx="305" cy="48" r="18" fill="#8b1538" opacity="0.3"/>
+              <circle cx="305" cy="48" r="14" fill="#c41e3a" opacity="0.5"/>
+              <circle cx="305" cy="48" r="10" fill="#dc143c" opacity="0.7"/>
+              <circle cx="305" cy="48" r="6" fill="#e57373" opacity="0.6"/>
+              <ellipse cx="305" cy="30" rx="7" ry="12" fill="#8b1538" opacity="0.4"/>
+              <ellipse cx="321" cy="38" rx="7" ry="12" fill="#c41e3a" opacity="0.45" transform="rotate(60 305 48)"/>
+            </g>
+            <g opacity="0.65">
+              <circle cx="190" cy="25" r="12" fill="#8b1538" opacity="0.4"/>
+              <circle cx="190" cy="25" r="8" fill="#c41e3a" opacity="0.6"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="seal">
+        <div class="seal-body">
+          <div class="seal-rose">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="16" r="10" fill="#8b1538" opacity="0.5"/>
+              <circle cx="16" cy="16" r="7" fill="#dc143c" opacity="0.7"/>
+              <circle cx="16" cy="16" r="4" fill="#e57373" opacity="0.8"/>
+              <ellipse cx="16" cy="10" rx="3" ry="5" fill="#dc143c" opacity="0.6"/>
+              <ellipse cx="21" cy="14" rx="3" ry="5" fill="#c41e3a" opacity="0.6" transform="rotate(60 16 16)"/>
+              <ellipse cx="21" cy="18" rx="3" ry="5" fill="#c41e3a" opacity="0.6" transform="rotate(120 16 16)"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card with your custom invitation -->
+    <div class="card" id="card">
+      <img src="invitation-design.png" alt="Laura & Steve Wedding Invitation" class="card-image">
+      
+      <div class="card-button-container">
+        <a class="card-cta" href="https://www.zola.com/wedding/thelewings2026" target="_blank">
+          View Wedding Details
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── Floating rose petals ──────────────────────────────────
+    const petalsEl = document.getElementById('petals');
+    const petalColors = ['#8b1538','#c41e3a','#dc143c','#e57373'];
+    
+    function makeRosePetal(color) {
+      return `<svg width="10" height="14" viewBox="0 0 10 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="5" cy="7" rx="4.5" ry="6.5" fill="${color}" opacity="0.8"/>
+        <path d="M5 1 Q8 7 5 13 Q2 7 5 1" fill="${color}" opacity="0.6"/>
+      </svg>`;
+    }
+
+    for (let i = 0; i < 20; i++) {
+      const p = document.createElement('div');
+      p.className = 'petal-float';
+      p.innerHTML = makeRosePetal(petalColors[Math.floor(Math.random()*petalColors.length)]);
+      p.style.cssText = `
+        left: ${Math.random()*100}vw;
+        top: -30px;
+        animation-duration: ${14+Math.random()*20}s;
+        animation-delay: ${Math.random()*15}s;
+      `;
+      petalsEl.appendChild(p);
+    }
+
+    // ── Rose petal burst on open ──────────────────────────────
+    function burstPetals() {
+      const colors = ['#8b1538','#c41e3a','#dc143c','#e57373','#aa2244','#951c32'];
+      for (let i = 0; i < 70; i++) {
+        const p = document.createElement('div');
+        p.className = 'burst-petal';
+        const size = 6 + Math.random() * 14;
+        const drift = (Math.random() - 0.5) * 280;
+        const rotate = 360 + Math.random() * 720;
+        
+        p.innerHTML = `<svg width="${size}" height="${size*1.4}" viewBox="0 0 10 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="5" cy="7" rx="4.5" ry="6.5" fill="${colors[Math.floor(Math.random()*colors.length)]}" opacity="0.9"/>
+          <path d="M5 1 Q8 7 5 13 Q2 7 5 1" fill="${colors[Math.floor(Math.random()*colors.length)]}" opacity="0.7"/>
+        </svg>`;
+        
+        p.style.cssText = `
+          left: ${10+Math.random()*80}vw;
+          top: ${5+Math.random()*35}vh;
+          animation-duration: ${2.8+Math.random()*4}s;
+          animation-delay: ${Math.random()*1.2}s;
+          --drift: ${drift}px;
+          --rotate: ${rotate}deg;
+        `;
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 8000);
+      }
+    }
+
+    // ── Open envelope ──────────────────────────────────────────
+    let opened = false;
+    function openEnvelope() {
+      if (opened) return;
+      opened = true;
+
+      const hint = document.getElementById('hint');
+      hint.style.transition = 'opacity 0.5s';
+      hint.style.opacity = '0';
+
+      document.getElementById('envelope').classList.add('opened');
+
+      setTimeout(() => {
+        document.getElementById('card').classList.add('visible');
+        burstPetals();
+        
+        // Smooth scroll to center the card
+        setTimeout(() => {
+          const card = document.getElementById('card');
+          const cardRect = card.getBoundingClientRect();
+          const cardCenter = cardRect.top + cardRect.height / 2;
+          const windowCenter = window.innerHeight / 2;
+          const scrollOffset = cardCenter - windowCenter;
+          
+          window.scrollBy({
+            top: scrollOffset,
+            behavior: 'smooth'
+          });
+        }, 400);
+      }, 650);
+
+      document.getElementById('scene').style.cursor = 'default';
+    }
+  </script>
+</body>
+</html>
